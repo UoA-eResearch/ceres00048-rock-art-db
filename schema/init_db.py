@@ -7,7 +7,8 @@ import csv
 
 engine = sql.create_engine('sqlite:///rockart.db')
 
-# Create the tables in the database
+# Clean out existing data, then create the tables in the database
+schema.metadata.drop_all(engine)
 schema.metadata.create_all(engine)
 
 # Initialise database with data from table files
@@ -19,11 +20,13 @@ for path in table_files:
     with open(path, newline='') as table_file:
         reader = csv.DictReader(table_file,delimiter=',',quotechar='"')
         entries = list(reader)
-        table = schema.metadata.tables[table_name]
-        if table is not None:
-            # If the a table that corresponds with a table file exists, create an insert statement. 
+        try:
+            # If the a table that corresponds with a table file exists, create an insert statement.
+            table = schema.metadata.tables[table_name]
             stmts.append(sql.insert(table,values=entries))
-
+        except KeyError:
+            print("Ignored table file",path,"as no corresponding table exists.")
+            pass
 
 connection = engine.connect()
 transaction = connection.begin()
