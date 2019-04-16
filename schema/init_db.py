@@ -9,9 +9,9 @@ engine = sql.create_engine('sqlite:///rockart.db')
 
 # Create the tables in the database
 schema.metadata.create_all(engine)
-stmts = []
 
 # Initialise database with data from table files
+stmts = []
 table_files = glob.glob('initial-data/*.csv')
 for path in table_files:
     print('Processing table data from ',path)
@@ -34,7 +34,7 @@ try:
     transaction.commit()
 except:
     transaction.rollback()
-    print("An error occurred while adding initial table data.")
+    print("An error occurred while adding initial table data. As a result, no initial table data is added.")
     raise
 
 connection.close()
