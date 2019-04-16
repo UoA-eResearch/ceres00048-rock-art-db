@@ -7,8 +7,7 @@ import csv
 
 engine = sql.create_engine('sqlite:///rockart.db')
 
-# Clean out existing data, then create the tables in the database
-schema.metadata.drop_all(engine)
+# Create the tables in the database
 schema.metadata.create_all(engine)
 
 # Initialise database with data from table files
@@ -37,7 +36,6 @@ try:
     transaction.commit()
 except:
     transaction.rollback()
-    print("An error occurred while adding initial table data. As a result, no initial table data is added.")
+    print("An error occurred while adding initial table data. As a result, no initial table data were added. Check if there is existing data in the table already.")
     raise
-
 connection.close()
