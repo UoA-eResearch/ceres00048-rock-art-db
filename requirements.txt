@@ -1,2 +1,3 @@
 sqlalchemy
-pg8000
+pg8000 # For talking to postgresql
+pymssql # For talking to MS SQL Server
